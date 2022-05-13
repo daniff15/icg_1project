@@ -67,7 +67,7 @@ body {
 
 #title {
 	position: absolute;
-  top: 50%;
+  top: 25%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size:120px;
@@ -116,6 +116,26 @@ body {
 	height: 75px;
 }
 
+.divControls {
+	border: 1px solid white;
+	display: block;
+	width: 500px;
+	height: 350px;
+}
+
+.controls {
+	border-radius: 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width: 350px; /* Can be in percentage also. */
+	height: 250px;
+	margin: 0 auto;
+	position: relative;
+	background-color: #d4d1d1;
+	padding: 10px;
+}
+
 #replay_button {
 	margin-top: 50%;
 	background-color: #d84d43;
@@ -143,4 +163,11 @@ body {
 
 #score {
 	margin-left: 0.5rem;
+}
+
+.imagege {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	color: #000000	;
 }
