@@ -1,0 +1,146 @@
+
+body { 
+	margin: 0;
+	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+#info {
+	position: absolute;
+	top: 0;
+	left: 0;
+	color: white;
+	border: 1px solid white;
+	display: block;
+	width: 250px;
+	height: 250px;
+}
+
+#initial_page {
+	display: grid;
+	border: 3px solid white;
+	place-items: center;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: black;
+	color: white;
+	z-index: 10;
+}
+
+#levelUp {
+	display: none;
+	place-items: center;
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	background-color: transparent;
+	margin-top: 7%;
+	font-size: 1.5rem;
+	color: white;
+	z-index: 11;
+}
+
+.waviy {
+	position: relative;
+  }
+  .waviy span {
+	position: relative;
+	display: inline-block;
+	font-size: 40px;
+	color: #fff;
+	text-transform: uppercase;
+	animation: flip 2s infinite;
+	animation-delay: calc(.2s * var(--i))
+  }
+  @keyframes flip {
+	0%,80% {
+	  transform: rotateY(360deg) 
+	}
+}
+
+#alignment, #alignmentover {
+	text-align: center;
+}
+
+#title {
+	position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size:120px;
+	letter-spacing:0.1em;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke-width: 3px;
+  -webkit-text-stroke-color: white;
+  text-shadow: 
+						8px 8px #437fd8,
+						20px 20px #000000;
+}
+
+#gameover {
+	display: none;
+	place-items: center;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: black;
+	color: white;
+	z-index: 10;
+}
+
+#gameOvertitle {
+	position: absolute;
+  	left: 50%;
+  	transform: translate(-50%, -50%);
+  	font-size:120px;
+		letter-spacing:0.1em;
+  	-webkit-text-fill-color: transparent;
+  	-webkit-text-stroke-width: 3px;
+  	-webkit-text-stroke-color: white;
+  	text-shadow: 
+						8px 8px #d84d43,
+						20px 20px #000000;
+}
+
+#start_button { 
+	margin-top: 200%;
+	background-color: #437fd8;
+	border: 1px solid white;
+	color: white;
+	width: 200px;
+	height: 75px;
+}
+
+#replay_button {
+	margin-top: 50%;
+	background-color: #d84d43;
+	border: 1px solid white;
+	color: white;
+	width: 200px;
+	height: 75px;
+}
+
+#start_button:hover, #replay_button:hover {
+	background-color: #3a5379;
+}
+
+#replay_button:hover {
+	background-color: #aa422f;
+}
+
+#gameOverScore{
+	display: flex;
+	justify-content: center;
+	margin-bottom: 1rem;
+	font-size: 1.5rem;
+	margin-top: 100%;
+}
+
+#score {
+	margin-left: 0.5rem;
+}

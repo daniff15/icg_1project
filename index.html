@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title> Infinite Runner </title>
+
+	<link rel="stylesheet" href="style.css">
+
+	<script type="text/javascript" src="http://threejs.org/build/three.js" defer></script>
+
+	<script type="text/javascript" src="main.js" defer></script>
+	<script type="text/javascript" src="game.js" defer></script>
+	<script type="text/javascript" src="OrbitControls.js" defer></script>
+</head>
+
+<body>
+	<div id="info">
+		<p style="text-align: center;">Game Information</p>
+		<hr>
+		<div id="gameStats">
+			<p style="margin-left: 5%; text-align: center;">Distance Covered <div style="text-align: center;" id="score">0</div></p>
+			<p style="margin-left: 5%; text-align: center;">Player's Health <div style="text-align: center;" id="health">50</div></p>
+		</div>
+	</div>
+
+	<div id="initial_page">
+		<div id="alignment">
+			<div id="title">INFINITE RUNNER</div>
+			<button id="start_button">START GAME</button>
+		</div>
+	</div>
+
+	<div id="levelUp">
+		<div class="waviy">
+			<span style="--i:1">L</span>
+			<span style="--i:2">e</span>
+			<span style="--i:3">v</span>
+			<span style="--i:4">e</span>
+			<span style="--i:5">l</span>
+			<span style="--i:6"> </span>
+			<span style="--i:7"> </span>
+			<span style="--i:8">U</span>
+			<span style="--i:9">p</span>
+			<span style="--i:10">!</span>
+		   </div>
+	</div>
+
+	<div id="gameover">
+		<div id="alignmentover">
+			<div id="gameOvertitle">Game Over</div>
+			<div id="gameOverScore">Score: <div style="text-align: center;" id="finalscore">0</div></div>
+			<button id="replay_button">RESTART GAME</button>
+		</div>
+	</div>
+</body>
+
+</html>
