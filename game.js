@@ -1,12 +1,12 @@
 class Game {
   constructor(scene, camera) {
-    //TODO - METER OS OBSTACULOS E LIFE A NAO APARECER TANTO PARA FORA
     this.speed = 20;
     this._initializeScene(scene, camera, false);
 
     this.scene = scene;
     this.camera = camera;
 
+    //initial vars in the game
     this.health = 50;
     this.score = 0;
 
@@ -40,15 +40,25 @@ class Game {
     document.addEventListener("keydown", this._onDocumentKeyDown.bind(this));
   }
 
+  //animate(), called in main.js
   update() {
     if (this.running) {
+      //in every animation time is increased and works as a method to make the sensation of the field moving
       this.time += this.clock.getDelta();
 
+      //sensation of move field
       this._moveField();
+
+      //check if player collided with any obstacle or life
       this._checkCollision();
+
+      //score
       this._distanceCovered();
+
+      //check if time to appear the message that the level will increase
       this._checkBiggerLevel();
 
+      //display message that the level will increase
       if (this.levelUp.style.display == "grid") {
         setTimeout(() => {
           this.levelUp.style.display = "none";
@@ -57,40 +67,11 @@ class Game {
     }
   }
 
-  _moveField() {
-    this.grid.material.uniforms.time.value = this.time * 2;
-    this.objects.position.z = this.speed * this.time;
-
-    //Object Pooling - https://gameprogrammingpatterns.com/object-pool.html
-
-    this.objects.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
-        const childPos = child.position.z + this.objects.position.z;
-
-        if (childPos > 0) {
-          //reset the elems
-          if (child.userData.type == "obstacule") {
-            this._configObstacule(
-              child,
-              this.airplane.position.x,
-              -this.objects.position.z
-            );
-          } else {
-            this._configLife(
-              child,
-              this.airplane.position.x,
-              -this.objects.position.z
-            );
-          }
-        }
-      }
-    });
-  }
-
   // all of this code to create the grid field (infinite) was taken from : https://stackoverflow.com/questions/51470309/three-js-and-infinite-forward-grid-movement
   _createField(scene) {
     var division = 20;
     var limit = 100;
+
     this.grid = new THREE.GridHelper(limit * 2, division, "blue", "blue");
 
     var moveable = [];
@@ -150,9 +131,40 @@ class Game {
     this.clock = new THREE.Clock();
   }
 
-  _ilumination(scene) {
-    scene.fog = new THREE.Fog(0xffffff, 1000, 4000);
+  _moveField() {
+    //grid helper moving
+    this.grid.material.uniforms.time.value = this.time * 2;
 
+    //objects (obstacles and lifes) moving toward player
+    this.objects.position.z = this.speed * this.time;
+
+    //Object Pooling - https://gameprogrammingpatterns.com/object-pool.html
+    this.objects.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        const childPos = child.position.z + this.objects.position.z;
+
+        if (childPos > 0) {
+          //reset the elems
+          if (child.userData.type == "obstacule") {
+            this._configObstacule(
+              child,
+              this.airplane.position.x,
+              -this.objects.position.z
+            );
+          } else {
+            this._configLife(
+              child,
+              this.airplane.position.x,
+              -this.objects.position.z
+            );
+          }
+        }
+      }
+    });
+  }
+
+  //Illumination on player
+  _ilumination(scene) {
     scene.add(new THREE.AmbientLight(0x222222));
 
     const light = new THREE.DirectionalLight(0xffffff, 2.25);
@@ -174,17 +186,20 @@ class Game {
     scene.add(light);
   }
 
+  //Create Obstacle
   _spawnObstacules() {
     //geometry
     const obsGeo = new THREE.BoxBufferGeometry(1, 1, 1);
     const obsMaterial = new THREE.MeshBasicMaterial({ color: 0xccdeee });
     const obstacule = new THREE.Mesh(obsGeo, obsMaterial);
 
+    //make the obstacle dimensions and set position to appear
     this._configObstacule(obstacule);
     obstacule.userData = { type: "obstacule" };
     this.objects.add(obstacule);
   }
 
+  //make the obstacle dimensions and set position to appear
   _configObstacule(obj, xPos = 0, zPos = 0) {
     //random scale
     obj.scale.set(
@@ -201,90 +216,7 @@ class Game {
     );
   }
 
-  _randomVal(min, max) {
-    return Math.random() * (max - min) + min;
-  }
-
-  _checkCollision() {
-    this.objects.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
-        const childPos = child.position.z + this.objects.position.z;
-        // possible airplane position X : [-3, 3]
-        // possible airplane position Y : [0, 1]
-
-        const touchLimitX = 1 + this.airplane.scale.x / 2;
-        const touchLimitZ = 1 + this.airplane.scale.z / 2;
-        const touchLimitY = 1 + this.airplane.scale.y / 2;
-
-        if (
-          childPos > -touchLimitZ &&
-          Math.abs(child.position.x - this.airplane.position.x) < touchLimitX &&
-          Math.abs(child.position.y - this.airplane.position.y) < touchLimitY
-        ) {
-          //collision
-
-          if (child.userData.type == "obstacule") {
-            // reduce health bar
-            this.health -= 10;
-            this.healtHTML.innerText = this.health;
-            this._configObstacule(
-              child,
-              this.airplane.position.x,
-              -this.objects.position.z
-            );
-            if (this.health == 0) {
-              this._gameover();
-            }
-          } else {
-            // increase health bar
-            this.health += 10;
-            this.healtHTML.innerText = this.health;
-            this._configLife(
-              child,
-              this.airplane.position.x,
-              -this.objects.position.z
-            );
-          }
-        }
-      }
-    });
-  }
-
-  _checkBiggerLevel() {
-    if (this.distanceOnLevel > 2000) {
-      this.levelUp.style.display = "grid";
-      this.speed += 5;
-      this._spawnObstacules();
-      this._spawnLife();
-      this.distanceOnLevel = 0;
-    }
-  }
-
-  _distanceCovered() {
-    this.distanceOnLevel += 1;
-    this.scoreHTML.innerText = this.objects.position.z.toFixed(0);
-  }
-
-  _restartGame(replay) {
-    this.score = 0;
-    this.health = 50;
-
-    this.scoreHTML.innerText = this.score;
-    this.healtHTML.innerText = this.health;
-
-    this.time = 0;
-    this.clock = new THREE.Clock();
-
-    this._initializeScene(this.scene, this.camera, replay);
-  }
-
-  _gameover() {
-    this.running = false;
-
-    this.finalscore.innerText = this.objects.position.z.toFixed(0);
-    this.gameover.style.display = "grid";
-  }
-
+  //Code the make the heart model --- https://threejs.org/docs/#api/en/extras/core/Shape
   _spawnLife() {
     const x = 0,
       y = -15;
@@ -306,11 +238,13 @@ class Game {
     heart.rotateY((100 * Math.PI) / 100);
     heart.scale.set(0.1, 0.1, 0.1);
 
+    //make the life dimensions and set position to appear
     this._configLife(heart);
     heart.userData = { type: "life" };
     this.objects.add(heart);
   }
 
+  //make the life dimensions and set position to appear
   _configLife(obj, xPos = 0, zPos = 0) {
     //random position
     obj.position.set(
@@ -320,6 +254,99 @@ class Game {
     );
   }
 
+  _randomVal(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  //check if player collided with anything
+  _checkCollision() {
+    this.objects.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        const childPos = child.position.z + this.objects.position.z;
+        // possible player position X : [-4, 4]
+        // possible player position Y : [0.5, 2.5]
+
+        //check if object enter in some of this position then touched player
+        const touchLimitX = 1 + this.airplane.scale.x / 2;
+        const touchLimitZ = 1 + this.airplane.scale.z / 2;
+        const touchLimitY = 1 + this.airplane.scale.y / 2;
+
+        if (
+          childPos > -touchLimitZ &&
+          Math.abs(child.position.x - this.airplane.position.x) < touchLimitX &&
+          Math.abs(child.position.y - this.airplane.position.y) < touchLimitY
+        ) {
+          //collision
+          //with obstacle
+          if (child.userData.type == "obstacule") {
+            // reduce health bar
+            this.health -= 10;
+            this.healtHTML.innerText = this.health;
+            this._configObstacule(
+              child,
+              this.airplane.position.x,
+              -this.objects.position.z
+            );
+            if (this.health == 0) {
+              this._gameover();
+            }
+          }
+          //with obstacle
+          else {
+            // increase health bar
+            this.health += 10;
+            this.healtHTML.innerText = this.health;
+            this._configLife(
+              child,
+              this.airplane.position.x,
+              -this.objects.position.z
+            );
+          }
+        }
+      }
+    });
+  }
+
+  //check if its time to change level
+  _checkBiggerLevel() {
+    if (this.distanceOnLevel > 2000) {
+      this.levelUp.style.display = "grid";
+      this.speed += 5;
+      this._spawnObstacules();
+      this._spawnLife();
+      this.distanceOnLevel = 0;
+    }
+  }
+
+  //score
+  _distanceCovered() {
+    this.distanceOnLevel += 1;
+    this.scoreHTML.innerText = this.objects.position.z.toFixed(0);
+  }
+
+  //restart game
+  _restartGame(replay) {
+    this.score = 0;
+    this.health = 50;
+
+    this.scoreHTML.innerText = this.score;
+    this.healtHTML.innerText = this.health;
+
+    this.time = 0;
+    this.clock = new THREE.Clock();
+
+    this._initializeScene(this.scene, this.camera, replay);
+  }
+
+  //game over
+  _gameover() {
+    this.running = false;
+
+    this.finalscore.innerText = this.objects.position.z.toFixed(0);
+    this.gameover.style.display = "grid";
+  }
+
+  //make player model
   _makePlane(scene) {
     const planegeometry = new THREE.CylinderGeometry(0.1, 0.4, 3, 8);
     const planematerial = new THREE.MeshLambertMaterial({ color: 0x193519 });
@@ -360,6 +387,7 @@ class Game {
   }
 
   //ICG Classes
+  //user input
   _onDocumentKeyDown(event) {
     switch (event.key) {
       case "ArrowLeft":
@@ -399,6 +427,7 @@ class Game {
 
   _initializeScene(scene, camera, replay) {
     //things where gettinh one on top of other when restart
+    //first time that the game is loaded
     if (!replay) {
       //create the scene
       this._ilumination(scene);
@@ -420,9 +449,12 @@ class Game {
 
       camera.rotateX((-20 * Math.PI) / 180);
       camera.position.set(0, 3, 4);
-    } else {
+    }
+    //when user clicks on restart key
+    else {
       this.objects.traverse((item) => {
         if (item instanceof THREE.Mesh) {
+          //set obstacles and lifes to initial positions
           if (item.userData.type == "obstacule") {
             this._configObstacule(
               item,
@@ -436,10 +468,13 @@ class Game {
               -this.objects.position.z
             );
           }
-        } else {
+        }
+        //set player to its initial position
+        else {
           item.position.set(0, 0, 0);
         }
       });
+      //set camera to its initial position
       this.camera.position.set(0, 3, 4);
       this.camera.lookAt(new THREE.Vector3(0, 1.5, 0)); // Set look at coordinate like this
     }
