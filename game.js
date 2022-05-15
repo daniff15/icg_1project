@@ -335,6 +335,8 @@ class Game {
     this.time = 0;
     this.clock = new THREE.Clock();
 
+    this.airplane.position.set(0, 0, 0);
+
     this._initializeScene(this.scene, this.camera, replay);
   }
 
