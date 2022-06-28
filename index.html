@@ -11,11 +11,12 @@
 
 	<link rel="stylesheet" href="style.css">
 
-	<script type="text/javascript" src="http://threejs.org/build/three.js" defer></script>
+	<script type="text/javascript" src="libs/three.js" defer></script>
+	<script type="text/javascript" src="libs/three.min.js" defer></script>
 
 	<script type="text/javascript" src="main.js" defer></script>
 	<script type="text/javascript" src="game.js" defer></script>
-	<script type="text/javascript" src="OrbitControls.js" defer></script>
+	<script type="text/javascript" src="libs/TrackballControls.js" defer></script>
 </head>
 
 <body>
@@ -23,8 +24,12 @@
 		<p style="text-align: center;">Game Information</p>
 		<hr>
 		<div id="gameStats">
-			<p style="margin-left: 5%; text-align: center;">Distance Covered <div style="text-align: center;" id="score">0</div></p>
-			<p style="margin-left: 5%; text-align: center;">Player's Health <div style="text-align: center;" id="health">50</div></p>
+			<p style="margin-left: 5%; text-align: center;">Distance Covered <div style="text-align: center;"
+					id="score">0</div>
+			</p>
+			<p style="margin-left: 5%; text-align: center;">Player's Health <div style="text-align: center;"
+					id="health">50</div>
+			</p>
 		</div>
 	</div>
 
@@ -37,21 +42,21 @@
 			<h3 style="text-align: center;">CONTROLS</h3>
 			<div class="controls">
 				<div class="imagege">
-					<img style="margin-left: -7%;" src="images/arrows.png" alt="moveKeys" width="75px" height="75px"/>
+					<img style="margin-left: -7%;" src="images/arrows.png" alt="moveKeys" width="75px" height="75px" />
 					<p style="margin-top: 30px;">Move Player</p>
 				</div>
 				<div class="imagege">
-					<img src="images/cursor.png" alt="moveKeys" width="50px" height="50px"/>
+					<img src="images/cursor.png" alt="moveKeys" width="50px" height="50px" />
 					<p>Move Camera</p>
 				</div>
 				<div class="imagege">
-					<img style="margin-left: 1%;" src="images/enter.png" alt="moveKeys" width="50px" height="50px"/>
+					<img style="margin-left: 1%;" src="images/enter.png" alt="moveKeys" width="50px" height="50px" />
 					<p>Restart Camera</p>
 				</div>
 				<div class="imagege">
-					<img src="images/escape.png" alt="moveKeys" width="50px" height="50px"/>
+					<img src="images/escape.png" alt="moveKeys" width="50px" height="50px" />
 					<p>Restart Game</p>
-				</div>	
+				</div>
 			</div>
 		</div>
 	</div>
@@ -68,13 +73,14 @@
 			<span style="--i:8">U</span>
 			<span style="--i:9">p</span>
 			<span style="--i:10">!</span>
-		   </div>
+		</div>
 	</div>
 
 	<div id="gameover">
 		<div id="alignmentover">
 			<div id="gameOvertitle">Game Over</div>
-			<div id="gameOverScore">Score: <div style="text-align: center;" id="finalscore">0</div></div>
+			<div id="gameOverScore">Score: <div style="text-align: center;" id="finalscore">0</div>
+			</div>
 			<button id="replay_button">RESTART GAME</button>
 		</div>
 	</div>

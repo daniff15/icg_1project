@@ -13,14 +13,14 @@ window.onload = () => {
   document.body.appendChild(renderer.domElement);
 
   //GET ORBIT CONTROLS FILE FROM https://gist.github.com/jonathanlurie/bcedf6153a33ec64ab0f7c45e4e6fb70
-  const controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.rotateSpeed = 0.25;
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.05;
-  controls.screenSpacePanning = false;
-  controls.minDistance = 10;
-  controls.maxDistance = 12;
-  controls.maxPolarAngle = Math.PI / 2;
+  var controls = new THREE.TrackballControls(camera, renderer.domElement);
+  controls.rotateSpeed = 1.0;
+  controls.zoomSpeed = 1.0;
+  controls.panSpeed = 1.0;
+  controls.noZoom = false;
+  controls.noPan = false;
+  controls.staticMoving = true;
+  controls.dynamicDampingFactor = 0.3;
 
   const game = new Game(scene, camera);
 
